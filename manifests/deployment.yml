@@ -39,7 +39,7 @@ spec:
             name: dev-db-secret
             key: connect
       - name: POSTS_PER_PAGE
-        value: 5
+        value: "5"
       - name: TZ
         value: "Europe/Zurich"
       resources: 
