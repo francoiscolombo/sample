@@ -1,9 +1,5 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
 
-# Controls when the action will run. Triggers the workflow on push or pull request 
-# events but only for the master branch
 on:
   push:
     branches: [ master ]
@@ -49,3 +45,19 @@ jobs:
         docker login cfakscontainerregistry.azurecr.io -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }}
         docker build fcblog -t cfakscontainerregistry.azurecr.io/fcblog:${{ github.sha }}
         docker push cfakscontainerregistry.azurecr.io/fcblog:${{ github.sha }}
+
+    - name: Connect to AKS
+      uses: Azure/aks-set-context@v1
+      with:
+        creds: '${{ secrets.AZURE_CREDENTIALS }}'
+        resource-group: CfAksRg
+        cluster-name: CfAksCluster
+
+    - name: Deploy to AKS
+      uses: Azure/k8s-deploy@v1
+      with:
+        namespace: 'default'
+        manifests: |
+            manifests/deployment.yml
+            manifests/service.yml
+        images: 'cfakscontainerregistry.azurecr.io/fcblog:${{ github.sha }}'

@@ -1,12 +1,21 @@
-apiVersion: v1
 kind: Service
-metadata:
-  name: fcblog
-  labels:
-    service: fcblog
-spec:
-  selector:
-    app: fcblog
-  ports:
-  - port: 5000
+apiVersion: v1
+metadata: 
+ name: fcblog
+ namespace: default
+ labels: 
+  "k8s-app": fcblog
+  "k8s-environment": dev
+ annotations: 
+  description: "this is our sample FC Blog application"
+spec: 
+ ports: 
+  - protocol: TCP
+    port: 80
     targetPort: 5000
+ selector: 
+  "k8s-app": fcblog
+  "k8s-environment": dev
+ type: LoadBalancer
+ sessionAffinity: None
+ externalTrafficPolicy: Cluster

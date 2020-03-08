@@ -1,31 +1,57 @@
-apiVersion: apps/v1
 kind: Deployment
-metadata:
-  name: fcblog
-  labels:
-    name: fcblog
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: fcblog
-  template:
-    metadata:
-      labels:
-        app: fcblog
-    spec:
-      containers:
-      - name: fcblog
-        image: fcaksregistry.azurecr.io/fcblog:latest
-        env:
-        - name: FLASK_APP
-          value: "fcblog.py"
-        - name: FLASK_DEBUG
-          value: "0"
-        - name: SECRET_KEY
-          value: "010073c7-648c-4c56-b19e-256fd58353df"
-        - name: POSTS_PER_PAGE
-          value: 5
-        - name: TZ
-          value: "Europe/Zurich"
-      restartPolicy: Always
+apiVersion: "extensions/v1beta1"
+metadata: 
+ name: fcblog
+ namespace: default
+ labels: 
+  "k8s-app": fcblog
+  "k8s-environment": dev
+ annotations: 
+  description: "this is our sample FC Blog application"
+spec: 
+ replicas: 1
+ selector: 
+  matchLabels: 
+   "k8s-app": fcblog
+   "k8s-environment": dev
+ template: 
+  metadata: 
+   name: fcblog
+   labels: 
+    "k8s-app": fcblog
+    "k8s-environment": dev
+   annotations: 
+    description: "this is our sample FC Blog application"
+  spec: 
+   containers: 
+    - name: fcblog
+      image: "cfakscontainerregistry.azurecr.io/fcblog:latest"
+      env: 
+      - name: FLASK_APP
+        value: "fcblog.py"
+      - name: FLASK_DEBUG
+        value: "0"
+      - name: SECRET_KEY
+        value: "010073c7-648c-4c56-b19e-256fd58353df"
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: dev-db-secret
+            key: connect
+      - name: POSTS_PER_PAGE
+        value: 5
+      - name: TZ
+        value: "Europe/Zurich"
+      resources: 
+        requests: 
+          cpu: 500m
+          memory: 200Mi
+      imagePullPolicy: Always
+      securityContext: 
+        privileged: false
+   restartPolicy: Always
+   terminationGracePeriodSeconds: 30
+   dnsPolicy: ClusterFirst
+   securityContext: 
+   imagePullSecrets: 
+    - name: "acr-auth"
