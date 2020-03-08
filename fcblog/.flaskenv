@@ -1,0 +1,2 @@
+FLASK_APP=fcblog.py
+FLASK_DEBUG=0

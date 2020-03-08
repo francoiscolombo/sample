@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Hi, {{ current_user.username }}!</h1>
+    {% if form %}
+    <hr/>
+    <p>do you have something to say?</p>
+    <form action="" method="post">
+      {{ form.hidden_tag() }}
+      <p>
+        {{ form.title.label }}<br>
+        {{ form.title(size=32) }}<br>
+        {% for error in form.title.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+      </p>
+      <p>
+        {{ form.photo.label }}<br>
+        {{ form.photo(size=32) }}<br>
+        {% for error in form.photo.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+      </p>
+      <p>
+        {{ form.content.label }}<br>
+        {{ form.content(cols=32, rows=4) }}<br>
+        {% for error in form.content.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+      </p>
+      <p>{{ form.submit() }}</p>
+    </form>
+    {% endif %}
+    <hr/>
+    <p>this is all the posts that you have to read today!</p>
+    {% for post in posts %}
+      {% include 'post.html' %}
+    {% endfor %}
+    {% if prev_url %}
+    <a href="{{ prev_url }}">Newer posts</a>&nbsp;
+    {% endif %}
+    {% if next_url %}
+    &nbsp;<a href="{{ next_url }}">Older posts</a>
+    {% endif %}
+{% endblock %}

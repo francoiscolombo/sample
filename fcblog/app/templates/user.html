@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <table>
+        <tr valign="top">
+            <td><img src="{{ user.avatar(128) }}"></td>
+            <td><h1>Posts published by {{ user.username }}</h1></td>
+        </tr>
+        <tr>
+            <td colspan="2">{{ user.followers.count() }} followers, {{ user.followed.count() }} following.</td>
+        </tr>
+        {% if user == current_user %}
+        <tr>
+            <td colspan="2"><a href="{{ url_for('edit_profile') }}">Edit your profile</a></td>
+        </tr>
+        {% elif not current_user.is_following(user) %}
+        <tr>
+            <td colspan="2"><a href="{{ url_for('follow', username=user.username) }}">Follow</a></td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="2"><a href="{{ url_for('unfollow', username=user.username) }}">Unfollow</a></td>
+        </tr>
+        {% endif %}
+    </table>
+    {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
+    {% if user.last_seen %}<p>Last seen on: {{ user.last_seen }}</p>{% endif %}
+    {% for post in posts %}
+      {% include 'post.html' %}
+    {% endfor %}
+{% endblock %}

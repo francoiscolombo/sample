@@ -1,0 +1,46 @@
+version: '3.1'
+
+services:
+
+  dbserver:
+    image: mysql/mysql-server:5.7
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_DATABASE: fcblog 
+      MYSQL_USER: fcblog
+      MYSQL_PASSWORD: mypassword
+    networks:
+      - fcblog_network
+
+  fcblog:
+    build:
+      context: fcblog
+    image: fcblog:latest
+    ports:
+      - 5000:5000
+    depends_on:
+      - dbserver
+    environment:
+      FLASK_APP: "fcblog.py"
+      FLASK_DEBUG: "0"
+      SECRET_KEY: "010073c7-648c-4c56-b19e-256fd58353df"
+      DATABASE_URL: "mysql+pymysql://fcblog:mypassword@dbserver/fcblog"
+      POSTS_PER_PAGE: 5
+      TZ: "Europe/Zurich"
+    networks:
+      - fcblog_network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8080:80
+    depends_on:
+      - dbserver
+    environment:
+      PMA_ARBITRARY: 1
+    networks:
+      - fcblog_network
+
+networks:
+  fcblog_network:
+    driver: bridge

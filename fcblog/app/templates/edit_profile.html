@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row no-gutter">
+    <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
+    <div class="col-md-8 col-lg-6">
+      <div class="login d-flex align-items-center py-5">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-9 col-lg-8 mx-auto">
+              <h3 class="login-heading mb-4">Edit Profile</h3>
+              <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <div class="form-label-group">
+                  {{ form.username.label }}<br>
+                  {{ form.username(size=32) }}<br>
+                  {% for error in form.username.errors %}
+                  <span style="color: red;">[{{ error }}]</span>
+                  {% endfor %}
+                </div>
+                <div class="form-label-group">
+                  {{ form.about_me.label }}<br>
+                  {{ form.about_me(cols=32, rows=5) }}<br>
+                  {% for error in form.about_me.errors %}
+                  <span style="color: red;">[{{ error }}]</span>
+                  {% endfor %}
+                </div>
+                <hr>
+                {{ form.submit() }}
+                <!--button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Register</button-->
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

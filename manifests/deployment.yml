@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fcblog
+  labels:
+    name: fcblog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fcblog
+  template:
+    metadata:
+      labels:
+        app: fcblog
+    spec:
+      containers:
+      - name: fcblog
+        image: fcaksregistry.azurecr.io/fcblog:latest
+        env:
+        - name: FLASK_APP
+          value: "fcblog.py"
+        - name: FLASK_DEBUG
+          value: "0"
+        - name: SECRET_KEY
+          value: "010073c7-648c-4c56-b19e-256fd58353df"
+        - name: POSTS_PER_PAGE
+          value: 5
+        - name: TZ
+          value: "Europe/Zurich"
+      restartPolicy: Always
