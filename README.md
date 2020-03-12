@@ -1,5 +1,7 @@
 # sample
 
+![CI](https://github.com/francoiscolombo/sample/workflows/CI/badge.svg)
+
 ## the application
 
 this is a sample python flask application, that we can run with docker-compose.
@@ -41,6 +43,8 @@ you can check that the application is working with the following url:
 - FC Blog (this application): http://localhost:5000/
 
 ## AKS deployment
+
+!!!PLEASE NOTE THAT THIS PART IS CURRENTLY DEACTIVATED!!!
 
 you need an Azure subscription, of course. we are going to use the Azure Cloud Shell, and the Azure CLI, in order to create all what we need.
 
