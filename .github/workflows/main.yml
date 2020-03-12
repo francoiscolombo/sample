@@ -40,24 +40,24 @@ jobs:
         pip install pytest
         pytest fcblog/tests.py -v
 
-    - name: Build docker image
-      run: |
-        docker login cfakscontainerregistry.azurecr.io -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }}
-        docker build fcblog -t cfakscontainerregistry.azurecr.io/fcblog:${{ github.sha }}
-        docker push cfakscontainerregistry.azurecr.io/fcblog:${{ github.sha }}
+#    - name: Build docker image
+#      run: |
+#        docker login cfakscontainerregistry.azurecr.io -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }}
+#        docker build fcblog -t cfakscontainerregistry.azurecr.io/fcblog:${{ github.sha }}
+#        docker push cfakscontainerregistry.azurecr.io/fcblog:${{ github.sha }}
 
-    - name: Connect to AKS
-      uses: Azure/aks-set-context@v1
-      with:
-        creds: '${{ secrets.AZURE_CREDENTIALS }}'
-        resource-group: CfAksRg
-        cluster-name: CfAksCluster
+#    - name: Connect to AKS
+#      uses: Azure/aks-set-context@v1
+#      with:
+#        creds: '${{ secrets.AZURE_CREDENTIALS }}'
+#        resource-group: CfAksRg
+#        cluster-name: CfAksCluster
 
-    - name: Deploy to AKS
-      uses: Azure/k8s-deploy@v1
-      with:
-        namespace: 'default'
-        manifests: |
-            manifests/deployment.yml
-            manifests/service.yml
-        images: 'cfakscontainerregistry.azurecr.io/fcblog:${{ github.sha }}'
+#    - name: Deploy to AKS
+#      uses: Azure/k8s-deploy@v1
+#      with:
+#        namespace: 'default'
+#        manifests: |
+#            manifests/deployment.yml
+#            manifests/service.yml
+#        images: 'cfakscontainerregistry.azurecr.io/fcblog:${{ github.sha }}'
